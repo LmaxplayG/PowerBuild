@@ -1,0 +1,7 @@
+build/**
+out/**
+src/**
+verbose.log
+pwc.json
+# For future use
+pwc.log

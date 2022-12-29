@@ -1,0 +1,25 @@
+{
+    "files.associations": {
+        "*.ejs": "html",
+        ".kshrc": "shellscript",
+        "*.xbs": "groovy",
+        "out": "log",
+        "stdio.h": "c",
+        "intrin.h": "c",
+        "msvcdefs.h": "c",
+        "intrin0.h": "c",
+        "winfix.h": "c",
+        "intrin0.inl.h": "c",
+        "stdlib.h": "c",
+        "iostream": "cpp",
+        "istream": "cpp",
+        "xiosbase": "cpp",
+        "string": "cpp",
+        "cstdio": "cpp",
+        "cstdarg": "cpp",
+        "chrono": "c",
+        "system_error": "c",
+        "xlocale": "c",
+        "xinput.h": "c"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "type": "PowerShell",
+            "request": "launch",
+            "name": "Compile",
+            "script": "${workspaceFolder}\\pw.ps1",
+            "args": [
+                "compile"
+            ],
+        }
+    ]
+}

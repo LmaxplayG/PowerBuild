@@ -1,0 +1,3 @@
+# .gitignore file recommended for projects that use PowerBuild
+build/**
+out/**
