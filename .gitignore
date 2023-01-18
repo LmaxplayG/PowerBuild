@@ -3,5 +3,6 @@ out/**
 src/**
 verbose.log
 pwc.json
+private_examples
 # For future use
 pwc.log

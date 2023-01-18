@@ -94,17 +94,13 @@ if ($null -eq $MsvcDir) {
 }
 
 $msvc = "$MsvcDir\bin\Host$HOSTARCH\$ARCH"
+$cl = ($msvc -replace "\\([a-zA-Z]*) ([a-zA-Z ]*)", "\\`"`$1 `$2`"") + "\cl.exe"
 
 $env:VCToolsInstallDir = "$MsvcDir\Tools\MSVC"
 
 if (-not (Test-Path $msvc)) {
     Write-Out -Error $true "Could not find Command-Line MSVC tools"
     exit 1
-}
-
-if (-not ($msvc -in $env:PATH.Split(';'))) {
-    Write-Out "Adding $msvc to PATH"
-    $env:PATH = "$msvc;$env:PATH"
 }
 
 $VkDir = "C:\Program Files\VulkanSDK\1.3.236.0";
@@ -456,7 +452,9 @@ if ($what -eq "build" -or $what -eq "clean") {
             $MPPart = "/MP$SystemThreads"
         }
 
-        $cmd = "cl /c $MPPart $cppPart /nologo /O2 /Fo`"$objDir`" $srcFilesString " + ((Get-Includes) -join " ")
+        # Adds ""s around paths with spaces using regex
+
+        $cmd = "$cl /c $MPPart $cppPart /nologo /O2 /Fo`"$objDir`" $srcFilesString " + ((Get-Includes) -join " ")
 
         # Write-Out $cmd -ForegroundColor Green
         Invoke-Expression $cmd
@@ -498,10 +496,17 @@ if ($what -eq "build" -or $what -eq "clean") {
         Write-Out "Please wait... (Alot of lib files are being included)" -ForegroundColor Yellow
     }
 
-    $cmd = "cl $MPPart $DllArgs /Fe`"$PSScriptRoot\out\$PROGRAMNAME.$Extension`" $objects /link /LIBPATH:`"$PSScriptRoot\build`" /nologo " + ((Get-Libs) -join " ") + " /SUBSYSTEM:CONSOLE"
+    $cmd = "$cl $MPPart $DllArgs /Fe`"$PSScriptRoot\out\$PROGRAMNAME.$Extension`" $objects /link /LIBPATH:`"$PSScriptRoot\build`" /nologo " + ((Get-Libs) -join " ") + " /SUBSYSTEM:CONSOLE"
 
     # Write-Out $cmd -ForegroundColor Green
     Invoke-Expression $cmd
+
+    $ErrorCode = $LASTEXITCODE
+
+    if ($ErrorCode -ne 0) {
+        Write-Out -Error $true "Error linking $PROGRAMNAME"
+        exit $ErrorCode
+    }
 
     Write-Out "Completed" -ForegroundColor Green
 }
